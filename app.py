@@ -207,40 +207,57 @@ footer { visibility: hidden; }
 </style>
 """, unsafe_allow_html=True)
 
-# ── SIDEBAR TOGGLE FIX (JS) ────────────────────────────────────────────────────
-# CSS alone cannot reliably fix this — Streamlit re-renders and overwrites styles.
-# A MutationObserver watches the DOM and re-applies visibility whenever Streamlit
-# touches the collapsed control element.
+# ── SIDEBAR TOGGLE FIX ────────────────────────────────────────────────────────
+# Inject a <style> tag directly into the parent document's <head>.
+# This bypasses Streamlit's iframe scoping and applies globally.
 st.markdown("""
 <script>
 (function() {
-    function fixToggle() {
-        // The arrow shown when sidebar is collapsed
-        const collapsed = window.parent.document.querySelector('[data-testid="stSidebarCollapsedControl"]');
-        if (collapsed) {
-            collapsed.style.setProperty('visibility', 'visible', 'important');
-            collapsed.style.setProperty('display', 'flex', 'important');
-            collapsed.style.setProperty('opacity', '1', 'important');
-            collapsed.style.setProperty('pointer-events', 'auto', 'important');
-            collapsed.style.setProperty('z-index', '999999', 'important');
-            collapsed.style.setProperty('background', '#ffffff', 'important');
-            collapsed.style.setProperty('border', '1px solid #e2e6ed', 'important');
-            collapsed.style.setProperty('border-radius', '0 8px 8px 0', 'important');
-            collapsed.style.setProperty('box-shadow', '2px 2px 6px rgba(0,0,0,0.08)', 'important');
-        }
-        // The arrow inside the open sidebar
-        const collapseBtn = window.parent.document.querySelector('[data-testid="stSidebarCollapseButton"]');
-        if (collapseBtn) {
-            collapseBtn.style.setProperty('visibility', 'visible', 'important');
-            collapseBtn.style.setProperty('opacity', '1', 'important');
-            collapseBtn.style.setProperty('pointer-events', 'auto', 'important');
-        }
+    function injectStyle() {
+        var parent = window.parent;
+        if (!parent) return;
+        var doc = parent.document;
+        if (doc.getElementById('sidebar-toggle-fix')) return; // already injected
+        var style = doc.createElement('style');
+        style.id = 'sidebar-toggle-fix';
+        style.innerHTML = `
+            [data-testid="stSidebarCollapsedControl"] {
+                visibility: visible !important;
+                display: flex !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
+                z-index: 999999 !important;
+                background: #ffffff !important;
+                border: 1px solid #e2e6ed !important;
+                border-radius: 0 8px 8px 0 !important;
+                box-shadow: 2px 2px 8px rgba(0,0,0,0.10) !important;
+                position: fixed !important;
+                top: 50% !important;
+                left: 0 !important;
+                transform: translateY(-50%) !important;
+                padding: 0.5rem 0.35rem !important;
+            }
+            [data-testid="stSidebarCollapsedControl"] button {
+                visibility: visible !important;
+                pointer-events: auto !important;
+                opacity: 1 !important;
+            }
+            [data-testid="stSidebarCollapseButton"] button {
+                visibility: visible !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
+            }
+        `;
+        doc.head.appendChild(style);
     }
-
-    // Run immediately and on every DOM mutation
-    fixToggle();
-    const observer = new MutationObserver(fixToggle);
-    observer.observe(window.parent.document.body, { childList: true, subtree: true, attributes: true });
+    // Try immediately, then retry until the parent DOM is ready
+    injectStyle();
+    var attempts = 0;
+    var interval = setInterval(function() {
+        injectStyle();
+        attempts++;
+        if (attempts > 20) clearInterval(interval);
+    }, 300);
 })();
 </script>
 """, unsafe_allow_html=True)
