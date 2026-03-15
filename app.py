@@ -45,6 +45,16 @@ html, body, [class*="css"] {
     max-width: 1440px !important;
 }
 
+/* ── Sidebar toggle — always visible ── */
+[data-testid="stSidebarCollapsedControl"],
+[data-testid="stSidebarCollapseButton"] {
+    visibility: visible !important;
+    display: flex !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    z-index: 999999 !important;
+}
+
 /* ── Sidebar ── */
 [data-testid="stSidebar"] {
     background-color: var(--white) !important;
