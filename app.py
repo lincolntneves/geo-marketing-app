@@ -42,22 +42,38 @@ html, body, [class*="css"] {
 /* Hide Streamlit chrome but keep sidebar toggle intact */
 #MainMenu { visibility: hidden; }
 footer { visibility: hidden; }
-[data-testid="stHeader"] { background: transparent !important; }
-[data-testid="stToolbar"] { visibility: hidden; }
 [data-testid="stDecoration"] { display: none; }
-.block-container {
-    padding: 1.75rem 2rem 3rem !important;
-    max-width: 1440px !important;
+[data-testid="stToolbar"] { display: none; }
+
+/* Keep header visible but transparent — it holds the collapse arrow */
+[data-testid="stHeader"] {
+    background: transparent !important;
+    visibility: visible !important;
 }
 
-/* ── Sidebar toggle — always visible ── */
-[data-testid="stSidebarCollapsedControl"],
-[data-testid="stSidebarCollapseButton"] {
+/* Collapsed sidebar arrow — always on top and clickable */
+[data-testid="stSidebarCollapsedControl"] {
     visibility: visible !important;
     display: flex !important;
     opacity: 1 !important;
     pointer-events: auto !important;
     z-index: 999999 !important;
+    background: var(--white) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 0 var(--radius) var(--radius) 0 !important;
+    box-shadow: 2px 0 6px rgba(0,0,0,0.06) !important;
+}
+
+/* Collapse button inside open sidebar */
+[data-testid="stSidebarCollapseButton"] {
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+.block-container {
+    padding: 1.75rem 2rem 3rem !important;
+    max-width: 1440px !important;
 }
 
 /* ── Sidebar ── */
@@ -352,11 +368,11 @@ with tabs[0]:
         </div>
         """, unsafe_allow_html=True)
     else:
-        m = folium.Map(
-            location=[df_filt['Latitude'].mean(), df_filt['Longitude'].mean()],
-            zoom_start=11,
-            tiles='cartodbpositron',
-        )
+        lat_min, lat_max = df_filt['Latitude'].min(), df_filt['Latitude'].max()
+        lon_min, lon_max = df_filt['Longitude'].min(), df_filt['Longitude'].max()
+
+        m = folium.Map(tiles='cartodbpositron')
+        m.fit_bounds([[lat_min, lon_min], [lat_max, lon_max]], padding=[30, 30])
 
         for _, row in df_filt.iterrows():
             color = COLORS[int(row['cluster']) % len(COLORS)]
