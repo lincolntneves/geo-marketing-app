@@ -294,10 +294,12 @@ st.markdown('<hr class="page-divider">', unsafe_allow_html=True)
 
 
 # ── KPI CARDS ──────────────────────────────────────────────────────────────────
-avg_income = df_filt['income'].mean()
-total_pop  = df_filt['people'].sum()
+avg_income = df_filt['income'].mean() if not df_filt.empty else 0
+total_pop  = df_filt['people'].sum()  if not df_filt.empty else 0
 n_clusters = df['cluster'].nunique()
 n_bairros  = len(df_filt)
+
+income_display = f"R$ {avg_income:,.0f}" if not df_filt.empty else "—"
 
 st.markdown(f"""
 <div class="kpi-row">
@@ -308,7 +310,7 @@ st.markdown(f"""
   </div>
   <div class="kpi-card accent">
     <div class="kpi-label">Renda Média</div>
-    <div class="kpi-value">R$ {avg_income:,.0f}</div>
+    <div class="kpi-value">{income_display}</div>
     <div class="kpi-sub">Média dos bairros filtrados</div>
   </div>
   <div class="kpi-card green">
@@ -334,32 +336,48 @@ with tabs[0]:
     st.markdown('<div class="sec-title">Distribuição Espacial por Segmento</div>', unsafe_allow_html=True)
     st.markdown('<div class="sec-sub">Cada ponto representa um bairro, colorido pelo seu cluster de mercado.</div>', unsafe_allow_html=True)
 
-    m = folium.Map(
-        location=[df_filt['Latitude'].mean(), df_filt['Longitude'].mean()],
-        zoom_start=11,
-        tiles='cartodbpositron',
-    )
+    if df_filt.empty:
+        st.markdown("""
+        <div style="
+            display:flex; flex-direction:column; align-items:center; justify-content:center;
+            height:420px; background:var(--white); border:1px solid var(--border);
+            border-radius:var(--radius); gap:0.75rem; color:var(--muted);
+        ">
+            <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"/>
+            </svg>
+            <span style="font-size:0.95rem; font-weight:600; color:var(--text)">Nenhuma cidade selecionada</span>
+            <span style="font-size:0.8rem;">Selecione ao menos uma cidade no painel lateral para visualizar o mapa.</span>
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        m = folium.Map(
+            location=[df_filt['Latitude'].mean(), df_filt['Longitude'].mean()],
+            zoom_start=11,
+            tiles='cartodbpositron',
+        )
 
-    for _, row in df_filt.iterrows():
-        color = COLORS[int(row['cluster']) % len(COLORS)]
-        folium.CircleMarker(
-            location=[row['Latitude'], row['Longitude']],
-            radius=7,
-            color=color,
-            fill=True,
-            fill_color=color,
-            fill_opacity=0.75,
-            weight=1,
-            popup=folium.Popup(
-                f"<b style='font-family:Inter'>{row['Bairro']}</b><br>"
-                f"Cluster: {row['cluster_nome']}<br>"
-                f"Renda: R$ {row['income']:,.0f}<br>"
-                f"Pop.: {row['people']:,.0f}",
-                max_width=200,
-            ),
-        ).add_to(m)
+        for _, row in df_filt.iterrows():
+            color = COLORS[int(row['cluster']) % len(COLORS)]
+            folium.CircleMarker(
+                location=[row['Latitude'], row['Longitude']],
+                radius=7,
+                color=color,
+                fill=True,
+                fill_color=color,
+                fill_opacity=0.75,
+                weight=1,
+                popup=folium.Popup(
+                    f"<b style='font-family:Inter'>{row['Bairro']}</b><br>"
+                    f"Cluster: {row['cluster_nome']}<br>"
+                    f"Renda: R$ {row['income']:,.0f}<br>"
+                    f"Pop.: {row['people']:,.0f}",
+                    max_width=200,
+                ),
+            ).add_to(m)
 
-    st_folium(m, width="100%", height=500)
+        st_folium(m, width="100%", height=500)
 
 
 # ── TAB 2 · CLUSTER PROFILES ──────────────────────────────────────────────────
