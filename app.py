@@ -406,11 +406,8 @@ with tabs[1]:
             textposition='outside',
             textfont=dict(size=11, color="#374151"),
         ))
-        fig_bar.update_layout(
-            **PL,
-            height=400,
-            xaxis=dict(**PL['xaxis'], title=dict(text="Renda Média (R$)", font=dict(size=11))),
-        )
+        pl_bar = {**PL, 'xaxis': dict(**PL['xaxis'], title=dict(text="Renda Média (R$)", font=dict(size=11)))}
+        fig_bar.update_layout(**pl_bar, height=400)
         st.plotly_chart(fig_bar, use_container_width=True)
 
     # Population bar
@@ -432,11 +429,8 @@ with tabs[1]:
         textposition='outside',
         textfont=dict(size=11, color="#374151"),
     ))
-    fig_pop.update_layout(
-        **PL,
-        height=300,
-        yaxis=dict(**PL['yaxis'], title=dict(text="População", font=dict(size=11))),
-    )
+    pl_pop = {**PL, 'yaxis': dict(**PL['yaxis'], title=dict(text="População", font=dict(size=11)))}
+    fig_pop.update_layout(**pl_pop, height=300)
     st.plotly_chart(fig_pop, use_container_width=True)
 
 
