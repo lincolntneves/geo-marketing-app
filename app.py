@@ -44,32 +44,7 @@ html, body, [class*="css"] {
 footer { visibility: hidden; }
 [data-testid="stDecoration"] { display: none; }
 [data-testid="stToolbar"] { display: none; }
-
-/* Keep header visible but transparent — it holds the collapse arrow */
-[data-testid="stHeader"] {
-    background: transparent !important;
-    visibility: visible !important;
-}
-
-/* Collapsed sidebar arrow — always on top and clickable */
-[data-testid="stSidebarCollapsedControl"] {
-    visibility: visible !important;
-    display: flex !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
-    z-index: 999999 !important;
-    background: var(--white) !important;
-    border: 1px solid var(--border) !important;
-    border-radius: 0 var(--radius) var(--radius) 0 !important;
-    box-shadow: 2px 0 6px rgba(0,0,0,0.06) !important;
-}
-
-/* Collapse button inside open sidebar */
-[data-testid="stSidebarCollapseButton"] {
-    visibility: visible !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
-}
+[data-testid="stHeader"] { background: transparent !important; }
 
 .block-container {
     padding: 1.75rem 2rem 3rem !important;
@@ -230,6 +205,44 @@ footer { visibility: hidden; }
 
 .js-plotly-plot .plotly .bg { fill: transparent !important; }
 </style>
+""", unsafe_allow_html=True)
+
+# ── SIDEBAR TOGGLE FIX (JS) ────────────────────────────────────────────────────
+# CSS alone cannot reliably fix this — Streamlit re-renders and overwrites styles.
+# A MutationObserver watches the DOM and re-applies visibility whenever Streamlit
+# touches the collapsed control element.
+st.markdown("""
+<script>
+(function() {
+    function fixToggle() {
+        // The arrow shown when sidebar is collapsed
+        const collapsed = window.parent.document.querySelector('[data-testid="stSidebarCollapsedControl"]');
+        if (collapsed) {
+            collapsed.style.setProperty('visibility', 'visible', 'important');
+            collapsed.style.setProperty('display', 'flex', 'important');
+            collapsed.style.setProperty('opacity', '1', 'important');
+            collapsed.style.setProperty('pointer-events', 'auto', 'important');
+            collapsed.style.setProperty('z-index', '999999', 'important');
+            collapsed.style.setProperty('background', '#ffffff', 'important');
+            collapsed.style.setProperty('border', '1px solid #e2e6ed', 'important');
+            collapsed.style.setProperty('border-radius', '0 8px 8px 0', 'important');
+            collapsed.style.setProperty('box-shadow', '2px 2px 6px rgba(0,0,0,0.08)', 'important');
+        }
+        // The arrow inside the open sidebar
+        const collapseBtn = window.parent.document.querySelector('[data-testid="stSidebarCollapseButton"]');
+        if (collapseBtn) {
+            collapseBtn.style.setProperty('visibility', 'visible', 'important');
+            collapseBtn.style.setProperty('opacity', '1', 'important');
+            collapseBtn.style.setProperty('pointer-events', 'auto', 'important');
+        }
+    }
+
+    // Run immediately and on every DOM mutation
+    fixToggle();
+    const observer = new MutationObserver(fixToggle);
+    observer.observe(window.parent.document.body, { childList: true, subtree: true, attributes: true });
+})();
+</script>
 """, unsafe_allow_html=True)
 
 
