@@ -15,191 +15,188 @@ st.set_page_config(
 # ── GLOBAL CSS ─────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-/* ── Google Fonts ── */
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* ── Root palette ── */
+/* ── Palette (light, clean — like the reference images) ── */
 :root {
-    --bg:        #0b0f1a;
-    --surface:   #121828;
-    --surface2:  #1a2236;
-    --border:    #1f2d47;
-    --accent:    #3b82f6;
-    --accent2:   #8b5cf6;
-    --success:   #10b981;
-    --warn:      #f59e0b;
-    --text:      #e2e8f0;
-    --muted:     #64748b;
-    --radius:    14px;
+    --bg:       #f4f6f9;
+    --white:    #ffffff;
+    --border:   #e2e6ed;
+    --text:     #1a1f2e;
+    --muted:    #6b7280;
+    --accent:   #c0392b;
+    --blue:     #2563eb;
+    --teal:     #0891b2;
+    --orange:   #d97706;
+    --green:    #16a34a;
+    --radius:   8px;
+    --shadow:   0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
 }
 
-/* ── Base ── */
 html, body, [class*="css"] {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Inter', sans-serif !important;
     background-color: var(--bg) !important;
     color: var(--text) !important;
 }
 
-/* ── Hide Streamlit chrome ── */
 #MainMenu, footer, header { visibility: hidden; }
-.block-container { padding: 2rem 2.5rem 3rem; max-width: 1600px; }
+.block-container {
+    padding: 1.75rem 2rem 3rem !important;
+    max-width: 1440px !important;
+}
 
 /* ── Sidebar ── */
 [data-testid="stSidebar"] {
-    background-color: var(--surface) !important;
-    border-right: 1px solid var(--border);
+    background-color: var(--white) !important;
+    border-right: 1px solid var(--border) !important;
 }
-[data-testid="stSidebar"] .css-1d391kg { padding-top: 1.5rem; }
+[data-testid="stSidebar"] > div:first-child {
+    padding-top: 1.5rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+}
 
-.sidebar-logo {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.15rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
+.sb-section {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 1.25rem 0 0.4rem;
+}
+
+.sb-title {
+    font-size: 1.1rem;
+    font-weight: 700;
     color: var(--text);
-    padding: 0 1rem 1.5rem;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.25rem;
+    line-height: 1.2;
 }
-.sidebar-logo span { color: var(--accent); }
-
-[data-testid="stSidebar"] label {
-    font-size: 0.72rem !important;
-    font-weight: 500 !important;
-    letter-spacing: 0.08em !important;
-    text-transform: uppercase !important;
-    color: var(--muted) !important;
-}
-
-/* ── Page header ── */
-.page-header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-bottom: 2rem;
+.sb-title span { color: var(--accent); }
+.sb-subtitle {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 1.25rem;
     padding-bottom: 1.25rem;
     border-bottom: 1px solid var(--border);
 }
-.page-header h1 {
-    font-family: 'Syne', sans-serif;
-    font-size: 2rem;
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    line-height: 1;
-    margin: 0;
-    background: linear-gradient(135deg, #e2e8f0 30%, var(--accent));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-.page-header p {
-    font-size: 0.85rem;
-    color: var(--muted);
-    margin: 0.4rem 0 0;
-}
-.status-badge {
-    display: inline-flex;
+
+.sb-stat {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 0.4rem;
-    background: rgba(16,185,129,0.12);
-    border: 1px solid rgba(16,185,129,0.3);
-    color: var(--success);
-    font-size: 0.75rem;
-    font-weight: 500;
-    padding: 0.35rem 0.85rem;
-    border-radius: 999px;
-    letter-spacing: 0.04em;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.8rem;
+    color: var(--muted);
 }
-.status-dot {
-    width: 6px; height: 6px;
-    background: var(--success);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
+.sb-stat b { color: var(--text); font-weight: 600; }
+
+[data-testid="stSidebar"] label {
+    font-size: 0.75rem !important;
+    font-weight: 500 !important;
+    color: var(--text) !important;
 }
-@keyframes pulse {
-    0%,100% { opacity:1; } 50% { opacity:0.4; }
+
+/* ── Page title ── */
+.page-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 0.15rem;
+    letter-spacing: -0.02em;
+}
+.page-meta {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+}
+.page-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0 0 1.5rem;
 }
 
 /* ── KPI cards ── */
-.kpi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-bottom: 1.75rem; }
+.kpi-row { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
 .kpi-card {
-    background: var(--surface);
+    flex: 1;
+    background: var(--white);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 1.25rem 1.5rem;
-    position: relative;
-    overflow: hidden;
-    transition: border-color .2s;
+    padding: 1.1rem 1.25rem;
+    box-shadow: var(--shadow);
 }
-.kpi-card:hover { border-color: var(--accent); }
-.kpi-card::before {
-    content: '';
-    position: absolute; top:0; left:0; right:0; height:3px;
-    background: var(--accent-grad, linear-gradient(90deg, var(--accent), var(--accent2)));
-}
-.kpi-card.green::before { --accent-grad: linear-gradient(90deg,#10b981,#34d399); }
-.kpi-card.amber::before { --accent-grad: linear-gradient(90deg,#f59e0b,#fbbf24); }
 .kpi-label {
-    font-size: 0.7rem; font-weight: 500;
-    letter-spacing: 0.09em; text-transform: uppercase;
-    color: var(--muted); margin-bottom: 0.5rem;
+    font-size: 0.72rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
 }
 .kpi-value {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.75rem; font-weight: 700;
-    letter-spacing: -0.03em; line-height: 1;
+    font-size: 1.65rem;
+    font-weight: 700;
     color: var(--text);
+    letter-spacing: -0.02em;
+    line-height: 1;
 }
-.kpi-sub { font-size: 0.75rem; color: var(--muted); margin-top: 0.35rem; }
+.kpi-sub {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-top: 0.3rem;
+}
+.kpi-card.accent .kpi-value { color: var(--accent); }
+.kpi-card.blue   .kpi-value { color: var(--blue);   }
+.kpi-card.green  .kpi-value { color: var(--green);  }
 
 /* ── Tabs ── */
+[data-testid="stTabs"] { background: transparent !important; }
 [data-testid="stTabs"] button {
-    font-family: 'DM Sans', sans-serif !important;
+    font-family: 'Inter', sans-serif !important;
     font-size: 0.82rem !important;
     font-weight: 500 !important;
     color: var(--muted) !important;
-    border-radius: 8px 8px 0 0 !important;
-    padding: 0.6rem 1.1rem !important;
-    transition: color .15s !important;
+    padding: 0.55rem 1rem !important;
+    border-radius: 0 !important;
+    border-bottom: 2px solid transparent !important;
 }
 [data-testid="stTabs"] button[aria-selected="true"] {
     color: var(--text) !important;
+    font-weight: 600 !important;
     border-bottom: 2px solid var(--accent) !important;
     background: transparent !important;
 }
-[data-testid="stTabs"] { border-bottom: 1px solid var(--border) !important; }
+[data-testid="stTabs"] button:hover {
+    color: var(--text) !important;
+    background: transparent !important;
+}
 
-/* ── Section title ── */
-.section-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 1rem; font-weight: 700;
-    letter-spacing: -0.01em;
+/* ── Section titles ── */
+.sec-title {
+    font-size: 0.9rem;
+    font-weight: 600;
     color: var(--text);
-    margin: 1.5rem 0 0.75rem;
+    margin: 1.25rem 0 0.2rem;
 }
-.section-subtitle {
-    font-size: 0.8rem; color: var(--muted); margin-top: -0.5rem; margin-bottom: 1rem;
+.sec-sub {
+    font-size: 0.76rem;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
 }
 
-/* ── Chart wrapper ── */
-.chart-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
+/* ── Info box ── */
+.info-box {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-left: 3px solid var(--blue);
     border-radius: var(--radius);
-    padding: 1.25rem;
+    padding: 0.85rem 1.1rem;
+    font-size: 0.8rem;
+    color: #1e40af;
 }
 
-/* ── Info banner ── */
-.info-banner {
-    background: rgba(59,130,246,0.08);
-    border: 1px solid rgba(59,130,246,0.25);
-    border-radius: var(--radius);
-    padding: 1rem 1.25rem;
-    font-size: 0.82rem;
-    color: #93c5fd;
-    display: flex; align-items: center; gap: 0.6rem;
-}
-
-/* ── Plotly dark override ── */
 .js-plotly-plot .plotly .bg { fill: transparent !important; }
 </style>
 """, unsafe_allow_html=True)
@@ -219,72 +216,82 @@ except Exception:
 
 # ── SIDEBAR ────────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.markdown('<div class="sidebar-logo">Geo<span>MKT</span> · Clusters</div>', unsafe_allow_html=True)
+    st.markdown("""
+        <div class="sb-title">Geo<span>Marketing</span></div>
+        <div class="sb-subtitle">Cluster Analysis Dashboard</div>
+    """, unsafe_allow_html=True)
 
-    st.markdown("##### Estados (UF)")
+    st.markdown('<div class="sb-section">Filtros</div>', unsafe_allow_html=True)
+
     ufs = st.multiselect(
-        "Estados",
+        "Estados (UF)",
         options=sorted(df['UF'].unique()),
         default=list(df['UF'].unique()),
-        label_visibility="collapsed",
     )
 
-    st.markdown("##### Cidades")
     city_opts = sorted(df[df['UF'].isin(ufs)]['Cidade'].unique())
     cidades = st.multiselect(
         "Cidades",
         options=city_opts,
         default=city_opts[:2],
-        label_visibility="collapsed",
     )
 
-    st.markdown("---")
-    st.markdown(
-        f'<div style="font-size:0.72rem;color:var(--muted);line-height:1.7">'
-        f'<b style="color:var(--text)">{len(df)} bairros</b> no dataset<br>'
-        f'<b style="color:var(--text)">{df["cluster"].nunique()}</b> segmentos identificados<br>'
-        f'<b style="color:var(--text)">{df["UF"].nunique()}</b> estados cobertos</div>',
-        unsafe_allow_html=True,
-    )
+    st.markdown('<div class="sb-section" style="margin-top:1.5rem">Resumo</div>', unsafe_allow_html=True)
+    st.markdown(f"""
+        <div class="sb-stat"><span>Bairros no dataset</span><b>{len(df):,}</b></div>
+        <div class="sb-stat"><span>Segmentos</span><b>{df['cluster'].nunique()}</b></div>
+        <div class="sb-stat"><span>Estados</span><b>{df['UF'].nunique()}</b></div>
+        <div class="sb-stat"><span>Cidades</span><b>{df['Cidade'].nunique()}</b></div>
+    """, unsafe_allow_html=True)
 
 df_filt = df[(df['UF'].isin(ufs)) & (df['Cidade'].isin(cidades))]
 
 
 # ── PLOTLY THEME ───────────────────────────────────────────────────────────────
-PLOTLY_LAYOUT = dict(
+PL = dict(
     paper_bgcolor="rgba(0,0,0,0)",
     plot_bgcolor="rgba(0,0,0,0)",
-    font=dict(family="DM Sans, sans-serif", color="#94a3b8", size=12),
-    margin=dict(l=16, r=16, t=40, b=16),
-    xaxis=dict(gridcolor="#1f2d47", linecolor="#1f2d47", tickcolor="#64748b"),
-    yaxis=dict(gridcolor="#1f2d47", linecolor="#1f2d47", tickcolor="#64748b"),
-    legend=dict(bgcolor="rgba(0,0,0,0)", bordercolor="#1f2d47", borderwidth=1),
-    colorway=["#3b82f6","#8b5cf6","#10b981","#f59e0b","#ef4444","#06b6d4"],
+    font=dict(family="Inter, sans-serif", color="#6b7280", size=11),
+    margin=dict(l=10, r=10, t=36, b=10),
+    xaxis=dict(gridcolor="#e2e6ed", linecolor="#e2e6ed", tickcolor="#9ca3af", zeroline=False),
+    yaxis=dict(gridcolor="#e2e6ed", linecolor="#e2e6ed", tickcolor="#9ca3af", zeroline=False),
+    legend=dict(
+        bgcolor="rgba(255,255,255,0.9)",
+        bordercolor="#e2e6ed",
+        borderwidth=1,
+        font=dict(size=11),
+    ),
+    colorway=["#c0392b","#2563eb","#0891b2","#d97706","#16a34a","#7c3aed"],
 )
 
-CLUSTER_COLORS = ["#3b82f6","#8b5cf6","#10b981","#f59e0b","#ef4444","#06b6d4"]
+COLORS = ["#c0392b","#2563eb","#0891b2","#d97706","#16a34a","#7c3aed"]
 
 
-# ── PAGE HEADER ────────────────────────────────────────────────────────────────
+# ── PAGE TITLE ─────────────────────────────────────────────────────────────────
 st.markdown(f"""
-<div class="page-header">
-  <div>
-    <h1>Segmentação de Mercado</h1>
-    <p>Análise geomarketing · {len(df_filt):,} bairros selecionados</p>
-  </div>
-  <span class="status-badge"><span class="status-dot"></span>Live</span>
-</div>
+    <div class="page-title">Segmentação Inteligente de Mercado</div>
+    <div class="page-meta">
+        Análise geomarketing &nbsp;·&nbsp; {len(df_filt):,} bairros selecionados
+        &nbsp;·&nbsp; {len(cidades)} cidade(s)
+    </div>
 """, unsafe_allow_html=True)
+st.markdown('<hr class="page-divider">', unsafe_allow_html=True)
 
 
 # ── KPI CARDS ──────────────────────────────────────────────────────────────────
-avg_income  = df_filt['income'].mean()
-total_pop   = df_filt['people'].sum()
-n_clusters  = df['cluster'].nunique()
+avg_income = df_filt['income'].mean()
+total_pop  = df_filt['people'].sum()
+n_clusters = df['cluster'].nunique()
+n_bairros  = len(df_filt)
 
 st.markdown(f"""
-<div class="kpi-grid">
-  <div class="kpi-card">
+<div class="kpi-row">
+  <div class="kpi-card blue">
+    <div class="kpi-label">Bairros Selecionados</div>
+    <div class="kpi-value">{n_bairros:,}</div>
+    <div class="kpi-sub">de {len(df):,} no dataset total</div>
+  </div>
+  <div class="kpi-card accent">
     <div class="kpi-label">Renda Média</div>
     <div class="kpi-value">R$ {avg_income:,.0f}</div>
     <div class="kpi-sub">Média dos bairros filtrados</div>
@@ -294,10 +301,10 @@ st.markdown(f"""
     <div class="kpi-value">{total_pop:,.0f}</div>
     <div class="kpi-sub">Soma dos bairros filtrados</div>
   </div>
-  <div class="kpi-card amber">
+  <div class="kpi-card">
     <div class="kpi-label">Segmentos</div>
     <div class="kpi-value">{n_clusters}</div>
-    <div class="kpi-sub">Clusters identificados no dataset</div>
+    <div class="kpi-sub">Clusters identificados</div>
   </div>
 </div>
 """, unsafe_allow_html=True)
@@ -309,19 +316,17 @@ tabs = st.tabs(["🗺️  Mapa Geográfico", "📊  Perfil dos Clusters", "🧬 
 
 # ── TAB 1 · MAP ───────────────────────────────────────────────────────────────
 with tabs[0]:
-    st.markdown('<div class="section-title">Distribuição Espacial por Segmento</div>', unsafe_allow_html=True)
-    st.markdown('<div class="section-subtitle">Cada ponto representa um bairro, colorido por cluster de mercado.</div>', unsafe_allow_html=True)
-
-    cores_folium = ['#3b82f6','#8b5cf6','#10b981','#f59e0b','#ef4444','#06b6d4']
+    st.markdown('<div class="sec-title">Distribuição Espacial por Segmento</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sec-sub">Cada ponto representa um bairro, colorido pelo seu cluster de mercado.</div>', unsafe_allow_html=True)
 
     m = folium.Map(
         location=[df_filt['Latitude'].mean(), df_filt['Longitude'].mean()],
         zoom_start=11,
-        tiles='cartodbdark_matter',  # dark base map
+        tiles='cartodbpositron',
     )
 
     for _, row in df_filt.iterrows():
-        color = cores_folium[int(row['cluster']) % len(cores_folium)]
+        color = COLORS[int(row['cluster']) % len(COLORS)]
         folium.CircleMarker(
             location=[row['Latitude'], row['Longitude']],
             radius=7,
@@ -329,10 +334,12 @@ with tabs[0]:
             fill=True,
             fill_color=color,
             fill_opacity=0.75,
-            weight=1.5,
+            weight=1,
             popup=folium.Popup(
-                f"<b>{row['Bairro']}</b><br>Cluster: {row['cluster_nome']}<br>"
-                f"Renda: R$ {row['income']:,.0f}<br>Pop.: {row['people']:,.0f}",
+                f"<b style='font-family:Inter'>{row['Bairro']}</b><br>"
+                f"Cluster: {row['cluster_nome']}<br>"
+                f"Renda: R$ {row['income']:,.0f}<br>"
+                f"Pop.: {row['people']:,.0f}",
                 max_width=200,
             ),
         ).add_to(m)
@@ -340,83 +347,122 @@ with tabs[0]:
     st_folium(m, width="100%", height=500)
 
 
-# ── TAB 2 · RADAR ─────────────────────────────────────────────────────────────
+# ── TAB 2 · CLUSTER PROFILES ──────────────────────────────────────────────────
 with tabs[1]:
-    col_left, col_right = st.columns([1.1, 1], gap="large")
+    col_l, col_r = st.columns(2, gap="medium")
 
-    with col_left:
-        st.markdown('<div class="section-title">Assinatura de Cada Segmento</div>', unsafe_allow_html=True)
-        st.markdown('<div class="section-subtitle">Valores normalizados 0–1 para comparação entre variáveis.</div>', unsafe_allow_html=True)
+    features_radar = ['income', 'people', 'cons_a_total', 'class_a1', 'age_adults', 'density']
+    perfil = df.groupby('cluster_nome')[features_radar].mean()
+    perfil_norm = (perfil - perfil.min()) / (perfil.max() - perfil.min())
 
-        features_radar = ['income', 'people', 'cons_a_total', 'class_a1', 'age_adults', 'density']
-        perfil = df.groupby('cluster_nome')[features_radar].mean()
-        perfil_norm = (perfil - perfil.min()) / (perfil.max() - perfil.min())
+    with col_l:
+        st.markdown('<div class="sec-title">Perfil Normalizado por Segmento</div>', unsafe_allow_html=True)
+        st.markdown('<div class="sec-sub">Valores normalizados 0–1 para comparação entre variáveis.</div>', unsafe_allow_html=True)
 
         fig_radar = go.Figure()
         for i, name in enumerate(perfil_norm.index):
+            vals = list(perfil_norm.iloc[i].values)
             fig_radar.add_trace(go.Scatterpolar(
-                r=list(perfil_norm.iloc[i].values) + [perfil_norm.iloc[i].values[0]],
+                r=vals + [vals[0]],
                 theta=features_radar + [features_radar[0]],
                 fill='toself',
                 name=name,
-                line=dict(color=CLUSTER_COLORS[i % len(CLUSTER_COLORS)], width=2),
-                fillcolor=CLUSTER_COLORS[i % len(CLUSTER_COLORS)].replace('#','rgba(') + ',0.12)' if False else CLUSTER_COLORS[i % len(CLUSTER_COLORS)],
-                opacity=0.85,
+                line=dict(color=COLORS[i % len(COLORS)], width=2),
+                opacity=0.75,
             ))
 
         fig_radar.update_layout(
-            **{k: v for k, v in PLOTLY_LAYOUT.items() if k not in ('xaxis','yaxis')},
+            **{k: v for k, v in PL.items() if k not in ('xaxis', 'yaxis')},
             polar=dict(
                 bgcolor="rgba(0,0,0,0)",
-                radialaxis=dict(visible=True, range=[0,1], gridcolor="#1f2d47", tickcolor="#64748b", tickfont=dict(size=10)),
-                angularaxis=dict(gridcolor="#1f2d47", tickcolor="#64748b"),
+                radialaxis=dict(
+                    visible=True, range=[0, 1],
+                    gridcolor="#e2e6ed", tickcolor="#9ca3af",
+                    tickfont=dict(size=9), tickvals=[0.25, 0.5, 0.75, 1.0],
+                ),
+                angularaxis=dict(gridcolor="#e2e6ed", tickfont=dict(size=11, color="#374151")),
             ),
-            height=420,
+            height=400,
         )
         st.plotly_chart(fig_radar, use_container_width=True)
 
-    with col_right:
-        st.markdown('<div class="section-title">Renda Média por Segmento</div>', unsafe_allow_html=True)
-        st.markdown('<div class="section-subtitle">Comparativo direto de poder aquisitivo.</div>', unsafe_allow_html=True)
+    with col_r:
+        st.markdown('<div class="sec-title">Renda Média por Segmento</div>', unsafe_allow_html=True)
+        st.markdown('<div class="sec-sub">Comparativo direto de poder aquisitivo entre clusters.</div>', unsafe_allow_html=True)
 
-        income_by_cluster = df.groupby('cluster_nome')['income'].mean().sort_values(ascending=True).reset_index()
+        income_df = (
+            df.groupby('cluster_nome')['income']
+            .mean()
+            .sort_values(ascending=True)
+            .reset_index()
+        )
 
         fig_bar = go.Figure(go.Bar(
-            x=income_by_cluster['income'],
-            y=income_by_cluster['cluster_nome'],
+            x=income_df['income'],
+            y=income_df['cluster_nome'],
             orientation='h',
-            marker=dict(
-                color=income_by_cluster['income'],
-                colorscale=[[0,'#1f2d47'],[0.5,'#3b82f6'],[1,'#8b5cf6']],
-                showscale=False,
-            ),
-            text=[f"R$ {v:,.0f}" for v in income_by_cluster['income']],
+            marker=dict(color=COLORS[:len(income_df)], line=dict(width=0)),
+            text=[f"R$ {v:,.0f}" for v in income_df['income']],
             textposition='outside',
-            textfont=dict(size=11, color='#94a3b8'),
+            textfont=dict(size=11, color="#374151"),
         ))
-        fig_bar.update_layout(**PLOTLY_LAYOUT, height=420)
+        fig_bar.update_layout(
+            **PL,
+            height=400,
+            xaxis=dict(**PL['xaxis'], title=dict(text="Renda Média (R$)", font=dict(size=11))),
+        )
         st.plotly_chart(fig_bar, use_container_width=True)
+
+    # Population bar
+    st.markdown('<div class="sec-title">População Total por Segmento</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sec-sub">Tamanho de mercado potencial por cluster (bairros filtrados).</div>', unsafe_allow_html=True)
+
+    pop_df = (
+        df_filt.groupby('cluster_nome')['people']
+        .sum()
+        .sort_values(ascending=False)
+        .reset_index()
+    )
+
+    fig_pop = go.Figure(go.Bar(
+        x=pop_df['cluster_nome'],
+        y=pop_df['people'],
+        marker=dict(color=COLORS[:len(pop_df)], line=dict(width=0)),
+        text=[f"{v:,.0f}" for v in pop_df['people']],
+        textposition='outside',
+        textfont=dict(size=11, color="#374151"),
+    ))
+    fig_pop.update_layout(
+        **PL,
+        height=300,
+        yaxis=dict(**PL['yaxis'], title=dict(text="População", font=dict(size=11))),
+    )
+    st.plotly_chart(fig_pop, use_container_width=True)
 
 
 # ── TAB 3 · PCA ───────────────────────────────────────────────────────────────
 with tabs[2]:
-    st.markdown('<div class="section-title">Separação Estatística — Projeção PCA 2D</div>', unsafe_allow_html=True)
-    st.markdown('<div class="section-subtitle">Quanto mais separados os grupos, mais distintos são os segmentos.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sec-title">Separação Estatística — Projeção PCA 2D</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sec-sub">Quanto mais separados os grupos, mais distintos são os segmentos de mercado.</div>', unsafe_allow_html=True)
 
     if 'pca_1' in df.columns and 'pca_2' in df.columns:
         fig_pca = px.scatter(
             df_filt, x='pca_1', y='pca_2',
             color='cluster_nome',
             hover_name='Bairro',
-            color_discrete_sequence=CLUSTER_COLORS,
-            opacity=0.8,
+            color_discrete_sequence=COLORS,
+            opacity=0.75,
+            labels={'pca_1': 'Componente Principal 1', 'pca_2': 'Componente Principal 2'},
         )
-        fig_pca.update_traces(marker=dict(size=8, line=dict(width=0.5, color='#0b0f1a')))
-        fig_pca.update_layout(**PLOTLY_LAYOUT, height=500)
+        fig_pca.update_traces(
+            marker=dict(size=7, line=dict(width=0.5, color='white'))
+        )
+        fig_pca.update_layout(**PL, height=520)
         st.plotly_chart(fig_pca, use_container_width=True)
     else:
         st.markdown("""
-        <div class="info-banner">
-            ℹ️  Execute o PCA no notebook e salve as colunas <b>pca_1</b> e <b>pca_2</b> no CSV para visualizar este gráfico.
+        <div class="info-box">
+            ℹ️  Execute o PCA no notebook e salve as colunas <b>pca_1</b> e <b>pca_2</b>
+            no CSV para visualizar este gráfico.
         </div>
         """, unsafe_allow_html=True)
