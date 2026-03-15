@@ -39,7 +39,12 @@ html, body, [class*="css"] {
     color: var(--text) !important;
 }
 
-#MainMenu, footer, header { visibility: hidden; }
+/* Hide Streamlit chrome but keep sidebar toggle intact */
+#MainMenu { visibility: hidden; }
+footer { visibility: hidden; }
+[data-testid="stHeader"] { background: transparent !important; }
+[data-testid="stToolbar"] { visibility: hidden; }
+[data-testid="stDecoration"] { display: none; }
 .block-container {
     padding: 1.75rem 2rem 3rem !important;
     max-width: 1440px !important;
